@@ -1,0 +1,5 @@
+Flask
+Flask-CORS
+librosa
+numpy
+tensorflow
