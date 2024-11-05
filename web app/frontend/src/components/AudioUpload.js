@@ -26,7 +26,7 @@ const AudioUpload = () => {
     const formData = new FormData();
     formData.append('file', file);
 
-    const response = await fetch('https://melodynet.onrender.com/predict', {
+    const response = await fetch('http://localhost:5000/predict', {
       method: 'POST',
       body: formData,
     });
@@ -49,7 +49,7 @@ const AudioUpload = () => {
       fileInputRef.current.value = '';
     }
 
-    const response = await fetch('https://melodynet.onrender.com/clear-uploads', {
+    const response = await fetch('http://localhost:5000/clear-uploads', {
       method: 'POST',
     });
 
