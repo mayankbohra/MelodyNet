@@ -1,5 +1,5 @@
 Flask
 Flask-CORS
-librosa
-numpy
-tensorflow
+librosa==0.10.2.post1
+numpy==1.23.5
+tensorflow==2.16.1

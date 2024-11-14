@@ -2,28 +2,29 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import librosa
 import numpy as np
-import tensorflow as tf
 import os
+import pickle
+from tensorflow.keras.models import model_from_json, load_model
 from tensorflow.image import resize
 
-#! Disable Tensorflow logs
+# Disable TensorFlow logs
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 
 import warnings
 warnings.filterwarnings("ignore")
 
-#! Create a Flask app
+# Create a Flask app
 app = Flask(__name__)
 CORS(app)
 
 UPLOAD_FOLDER = './uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-model = tf.keras.models.load_model("Trained_model.h5")
+model = load_model("Trained_model.h5")
 classes = ['blues', 'classical', 'country', 'disco', 'hiphop', 'jazz', 'metal', 'pop', 'reggae', 'rock']
 
-#! Function to load and preprocess the audio data for prediction
+# Function to load and preprocess the audio data for prediction
 def load_and_preprocess_data(file_path, target_shape=(210, 210)):
     data = []
     audio_data, sample_rate = librosa.load(file_path, sr=None)
@@ -50,7 +51,7 @@ def load_and_preprocess_data(file_path, target_shape=(210, 210)):
 
     return np.array(data)
 
-#! Function to make predictions using the model
+# Function to make predictions using the model
 def model_prediction(X_test):
     y_pred = model.predict(X_test)
     predicted_categories = np.argmax(y_pred, axis=1)
@@ -66,37 +67,35 @@ def index():
     return 'Welcome to MelodyNet'
 
 @app.route('/predict', methods=['POST'])
-#! Function to handle the prediction request from the frontend application
+# Function to handle the prediction request from the frontend application
 def predict():
     if 'file' not in request.files:
         return jsonify({'error': 'No file part in the request'}), 400
-    file = request.files['file']
 
+    file = request.files['file']
     if file.filename == '':
         return jsonify({'error': 'No file selected'}), 400
 
     # Create the uploads folder if it does not exist
     os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-
     file_path = os.path.join(UPLOAD_FOLDER, file.filename)
 
     try:
         file.save(file_path)
         X_test = load_and_preprocess_data(file_path)
-
         if X_test.size == 0:
             return jsonify({'error': 'No valid audio data to process'}), 400
-        pred = model_prediction(X_test)
 
+        pred = model_prediction(X_test)
         if pred is None:
             return jsonify({'error': 'No prediction made'}), 500
-        return jsonify({'prediction': classes[pred]})
 
+        return jsonify({'prediction': classes[pred]})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
 @app.route('/clear-uploads', methods=['POST'])
-#! Function to clear the uploads folder after the prediction request
+# Function to clear the uploads folder after the prediction request
 def clear_uploads():
     try:
         for filename in os.listdir(UPLOAD_FOLDER):
@@ -107,4 +106,4 @@ def clear_uploads():
         return jsonify({'success': False, 'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=False)

@@ -30,6 +30,7 @@ const AudioUpload = () => {
       method: 'POST',
       body: formData,
     });
+    console.log("Data received from backend...");
 
     const data = await response.json();
     setLoading(false);
