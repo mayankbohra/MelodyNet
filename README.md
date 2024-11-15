@@ -1,9 +1,9 @@
 # Music Genre Classification Using Deep Learning
 
 ## NOTE
-The deployed model, named "model-1," has 11,402 trainable parameters and achieved an accuracy of 0.4859 with a loss of 1.4530 on the training set, while the validation set results were 0.4671 accuracy and 1.5126 loss.
+The deployed model, named "model-1," has 11,402 trainable parameters and achieved an accuracy of 48.59% on the training set, while the validation set results were 46.71% accuracy.
 
-Although I developed a more accurate "Final Model" that achieved 0.9888 accuracy with a 0.0352 loss on the training set and 0.9255 accuracy with a 0.2932 loss on the validation set, I was unable to deploy it due to its size—over 14 million trainable parameters. Render.com's free plan, which limits memory to 512 MB of RAM, could not accommodate the larger model.
+Although I developed a more accurate "Final Model" that achieved 98.88% accuracy on the training set and 92.55% accuracy on the validation set, I was unable to deploy it due to its size—over 14 million trainable parameters. Render.com's free plan, which limits memory to 512 MB of RAM, could not accommodate the larger model.
 
 To demonstrate my ML skills within the memory constraints, I deployed the smaller model instead. This project showcases not only my machine learning expertise but also my ability to develop and deploy a model effectively, demonstrating proficiency in creating a full-stack application that integrates an ML model.
 
